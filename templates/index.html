@@ -49,10 +49,88 @@
     <script>
         $(document).ready(function () {
             $('#cards-box').empty();
+            $('#rising_stocks').empty();
+            $('#fast_rising_stocks').empty();
+            rising_stocks();
+            fast_rising_stocks();
             showPost();
         });
 
-        // $('#cards-box').empty();
+        function rising_stocks() {
+            $.ajax({
+                type: "GET",
+                url: "/rising_stocks",
+                data: {},
+                success: function (response) {
+                    // console.log(response);
+                    let rising_stocks = response["rising_stocks"]
+                    // console.log(rising_stocks);
+                    let temp_html_head =`<th>순위</th>
+                                         <th>종목명</th>
+                                         <th>검색비율</th>
+                                         <th>등락률</th>
+                    `;
+                    $("#rising_stocks").append(temp_html_head);
+                    for (let i = 0; i < 5; i++) {
+                        let company_ranking = rising_stocks[i]['순위'];
+                        let company_name = rising_stocks[i]['종목명'];
+                        let company_rate = rising_stocks[i]['검색비율'];
+                        let company_updown = rising_stocks[i]['등락률'];
+                        // console.log(company_ranking)
+                        // console.log(company_name)
+                        // console.log(company_rate)
+                        let temp_html_info = `<tr>
+                                             <td>"${company_ranking}"</td>
+                                             <td>"${company_name}"</td>
+                                             <td>"${company_rate}"</td>
+                                             <td>"${company_updown}"</td>
+                                        </tr>
+                        `;
+                        $("#rising_stocks").append(temp_html_info);
+
+                    }
+
+                    }
+            });
+        }
+
+        function fast_rising_stocks() {
+            $.ajax({
+                type: "GET",
+                url: "/fast_rising_stocks",
+                data: {},
+                success: function (response) {
+                    console.log(response);
+                    let fast_rising_stocks = response["fast_rising_stocks"]
+                    console.log(fast_rising_stocks);
+                    let temp_html_head =`<th>순위</th>
+                                         <th>종목명</th>
+                                         <th>현재가</th>
+                                         <th>등락률</th>
+                    `;
+                    $("#fast_rising_stocks").append(temp_html_head);
+                    for (let i = 0; i < 5; i++) {
+                        let company_ranking = fast_rising_stocks[i]['N'];
+                        let company_name = fast_rising_stocks[i]['종목명'];
+                        let company_price = fast_rising_stocks[i]['현재가'];
+                        let company_updown = fast_rising_stocks[i]['등락률'];
+                        // console.log(company_ranking)
+                        // console.log(company_name)
+                        // console.log(company_rate)
+                        let temp_html_info = `<tr>
+                                             <td>"${company_ranking}"</td>
+                                             <td>"${company_name}"</td>
+                                             <td>"${company_price}"</td>
+                                             <td>"${company_updown}"</td>
+                                        </tr>
+                        `;
+                        $("#fast_rising_stocks").append(temp_html_info);
+
+                    }
+
+                    }
+            });
+        }
 
         function showPost() {
             $.ajax({
@@ -102,7 +180,7 @@
         <img src="https://t1.daumcdn.net/cfile/tistory/993545405EB7A9342C" data-noaft="1" jsname="HiaYvf"
              jsaction="load:XAeZkd;" style="width: 385px; height: 294.14px; margin: 0px;">
         <p class="lead">우리가 역사다 -John Ver-</p>
-        <table border="1">
+        <table id="rising_stocks" border="1">
             <th>테이블</th>
             <th>만들기</th>
             <tr><!-- 첫번째 줄 시작 -->
@@ -114,7 +192,7 @@
                 <td>두번째 칸</td>
             </tr><!-- 두번째 줄 끝 -->
         </table>
-        <table border="1">
+        <table id="fast_rising_stocks" border="1">
             <th>테이블</th>
             <th>만들기</th>
             <tr><!-- 첫번째 줄 시작 -->
