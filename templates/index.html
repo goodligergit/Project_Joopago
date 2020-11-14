@@ -53,8 +53,36 @@
             $('#fast_rising_stocks').empty();
             rising_stocks();
             fast_rising_stocks();
-            showPost();
+            // showPost();
         });
+
+        function post_stock() {
+            let stock_input = $("#post_stock").val();
+            $.ajax({
+                type: "POST",
+                url: "/post_stock",
+                data: {stock : stock_input},
+                success: function (response) {
+                    let news_list = response["news_list"]
+                    console.log(news_list)
+                    for (let i = 0; i < news_list.length; i++) {
+                        let og_image = news_list[i][0];
+                        let og_title = news_list[i][1];
+                        let og_description = news_list[i][2];
+                        let temp_html = `<div class="card">
+                                            <img class="card-img-top"
+                                                 src="${og_image}"
+                                                 alt="Card image cap">
+                                            <div class="card-body">
+                                                <a href="#" class="card-title">${og_title}</a>
+                                                <p class="card-text">${og_description}</p>
+                                            </div>
+                                        </div>`;
+                        $("#cards-box").append(temp_html);
+                    }
+                }
+            })
+        }
 
         function rising_stocks() {
             $.ajax({
@@ -65,7 +93,7 @@
                     // console.log(response);
                     let rising_stocks = response["rising_stocks"]
                     // console.log(rising_stocks);
-                    let temp_html_head =`<th>순위</th>
+                    let temp_html_head = `<th>순위</th>
                                          <th>종목명</th>
                                          <th>검색비율</th>
                                          <th>등락률</th>
@@ -90,7 +118,7 @@
 
                     }
 
-                    }
+                }
             });
         }
 
@@ -103,7 +131,7 @@
                     console.log(response);
                     let fast_rising_stocks = response["fast_rising_stocks"]
                     console.log(fast_rising_stocks);
-                    let temp_html_head =`<th>순위</th>
+                    let temp_html_head = `<th>순위</th>
                                          <th>종목명</th>
                                          <th>현재가</th>
                                          <th>등락률</th>
@@ -128,7 +156,7 @@
 
                     }
 
-                    }
+                }
             });
         }
 
@@ -204,58 +232,59 @@
                 <td>두번째 칸</td>
             </tr><!-- 두번째 줄 끝 -->
         </table>
-        <table border="1">
-            <th>테이블</th>
-            <th>만들기</th>
-            <tr><!-- 첫번째 줄 시작 -->
-                <td>첫번째 칸</td>
-                <td>두번째 칸</td>
-            </tr><!-- 첫번째 줄 끝 -->
-            <tr><!-- 두번째 줄 시작 -->
-                <td>첫번째 칸</td>
-                <td>두번째 칸</td>
-            </tr><!-- 두번째 줄 끝 -->
-        </table>
+<!--        <table border="1">-->
+<!--            <th>테이블</th>-->
+<!--            <th>만들기</th>-->
+<!--            <tr>&lt;!&ndash; 첫번째 줄 시작 &ndash;&gt;-->
+<!--                <td>첫번째 칸</td>-->
+<!--                <td>두번째 칸</td>-->
+<!--            </tr>&lt;!&ndash; 첫번째 줄 끝 &ndash;&gt;-->
+<!--            <tr>&lt;!&ndash; 두번째 줄 시작 &ndash;&gt;-->
+<!--                <td>첫번째 칸</td>-->
+<!--                <td>두번째 칸</td>-->
+<!--            </tr>&lt;!&ndash; 두번째 줄 끝 &ndash;&gt;-->
+<!--        </table>-->
+
         <hr class="my-4">
         <p class="lead">
-            종목명 : <input type="text"/>
-            <button id="btn-post-box" type="button" class="btn btn-primary">검색</button>
+            종목명 : <input id="post_stock" type="text"/>
+            <button id="btn-post-box" type="button" class="btn btn-primary" onclick="post_stock()">검색</button>
         </p>
     </div>
 
-    <div class="jumbotron">
-        <h1 class="display-4">주식차트 가져오기</h1>
-        <img class="_stock_chart"
-             src="https://ssl.pstatic.net/imgfinance/chart/mobile/day/005930_search.png?sidcode=1397739283538"
-             width="300" height="186" alt="1일그래프"
-             onerror="this.src='https://ssl.pstatic.net/imgfinance/chart/mobile/empty.png'">
-        <p class="lead">우리가 역사다 -John Ver-</p>
-        <table border="1">
-            <th>테이블</th>
-            <th>만들기</th>
-            <tr><!-- 첫번째 줄 시작 -->
-                <td>첫번째 칸</td>
-                <td>두번째 칸</td>
-            </tr><!-- 첫번째 줄 끝 -->
-            <tr><!-- 두번째 줄 시작 -->
-                <td>첫번째 칸</td>
-                <td>두번째 칸</td>
-            </tr><!-- 두번째 줄 끝 -->
-        </table>
-        <table border="1">
-            <th>테이블</th>
-            <th>만들기</th>
-            <tr><!-- 첫번째 줄 시작 -->
-                <td>첫번째 칸</td>
-                <td>두번째 칸</td>
-            </tr><!-- 첫번째 줄 끝 -->
-            <tr><!-- 두번째 줄 시작 -->
-                <td>첫번째 칸</td>
-                <td>두번째 칸</td>
-            </tr><!-- 두번째 줄 끝 -->
-        </table>
+<!--    <div class="jumbotron">-->
+<!--        <h1 class="display-4">주식차트 가져오기</h1>-->
+<!--        <img class="_stock_chart"-->
+<!--             src="https://ssl.pstatic.net/imgfinance/chart/mobile/day/005930_search.png?sidcode=1397739283538"-->
+<!--             width="300" height="186" alt="1일그래프"-->
+<!--             onerror="this.src='https://ssl.pstatic.net/imgfinance/chart/mobile/empty.png'">-->
+<!--        <p class="lead">우리가 역사다 -John Ver-</p>-->
+<!--        <table border="1">-->
+<!--            <th>테이블</th>-->
+<!--            <th>만들기</th>-->
+<!--            <tr>&lt;!&ndash; 첫번째 줄 시작 &ndash;&gt;-->
+<!--                <td>첫번째 칸</td>-->
+<!--                <td>두번째 칸</td>-->
+<!--            </tr>&lt;!&ndash; 첫번째 줄 끝 &ndash;&gt;-->
+<!--            <tr>&lt;!&ndash; 두번째 줄 시작 &ndash;&gt;-->
+<!--                <td>첫번째 칸</td>-->
+<!--                <td>두번째 칸</td>-->
+<!--            </tr>&lt;!&ndash; 두번째 줄 끝 &ndash;&gt;-->
+<!--        </table>-->
+<!--        <table border="1">-->
+<!--            <th>테이블</th>-->
+<!--            <th>만들기</th>-->
+<!--            <tr>&lt;!&ndash; 첫번째 줄 시작 &ndash;&gt;-->
+<!--                <td>첫번째 칸</td>-->
+<!--                <td>두번째 칸</td>-->
+<!--            </tr>&lt;!&ndash; 첫번째 줄 끝 &ndash;&gt;-->
+<!--            <tr>&lt;!&ndash; 두번째 줄 시작 &ndash;&gt;-->
+<!--                <td>첫번째 칸</td>-->
+<!--                <td>두번째 칸</td>-->
+<!--            </tr>&lt;!&ndash; 두번째 줄 끝 &ndash;&gt;-->
+<!--        </table>-->
 
-    </div>
+<!--    </div>-->
 
 
     <div id="cards-box" class="card-columns">
